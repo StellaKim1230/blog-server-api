@@ -11,8 +11,8 @@ export default class PostService {
 
   public async list() {
     try {
-      const docs = await PostModel.find({})
-      return docs
+      const posts = await PostModel.find({})
+      return posts
     } catch(e) {
       console.error(e)
     }
