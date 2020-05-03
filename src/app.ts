@@ -3,7 +3,9 @@ import mongoose from 'mongoose'
 
 import routes from './routes'
 
-mongoose.connect('mongodb://localhost:27017/myblog')
+mongoose.connect('mongodb://localhost:27017/myblog', {
+  useUnifiedTopology: true
+})
 
 const db = mongoose.connection
 

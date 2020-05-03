@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose'
 import { Comment } from './Comment'
 
 export interface Post extends Document {
+  _id: string
   title: string
   content: string
   comments: Comment[]

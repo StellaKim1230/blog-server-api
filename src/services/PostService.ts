@@ -1,14 +1,6 @@
-import PostModel from '../models/Post'
+import PostModel, { Post } from '../models/Post'
 
 export default class PostService {
-  posts = [{
-    id: 1,
-    title: 'test1'
-  }, {
-    id: 2,
-    title: 'test2'
-  }]
-
   public async list() {
     try {
       const posts = await PostModel.find({})
@@ -18,7 +10,24 @@ export default class PostService {
     }
   }
 
-  public findById(id: number) {
-    return this.posts.find(post => post.id === id)
+  public async findById(id: string) {
+    const post = await PostModel.findById(id)
+    return post
+  }
+
+  public async create(postInput: Pick<Post, 'title' | 'content'>) {
+    const { title, content } = postInput
+
+    if (title && content) {
+      const createdPost = await PostModel.create(postInput)
+      return createdPost
+    }
+
+    return null
+  }
+
+  public async delete(id: string) {
+    const isDeleted = await PostModel.deleteOne({ _id: id })
+    return isDeleted.deletedCount
   }
 }
