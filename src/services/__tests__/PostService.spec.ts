@@ -12,7 +12,6 @@ describe('PostService', () => {
         expect(res.status).toEqual(200)
         expect(Array.isArray(res.body)).toBe(true)
         done()
-        return res
     })
   })
 
@@ -23,7 +22,6 @@ describe('PostService', () => {
       const res = await new PostModel({ title: 'test', content: 'test' }).save()
       id = res._id
       done()
-      return res
     })
 
     test('should return one of post document', async (done) => {
@@ -33,7 +31,6 @@ describe('PostService', () => {
       expect(res.body.title).toEqual('test')
       expect(res.body.content).toEqual('test')
       done()
-      return res
     })
 
     test('should return 400 error if post documnet not exist', async (done) => {
@@ -41,13 +38,11 @@ describe('PostService', () => {
         .get('/posts/NOT_EXIST_ID')
       expect(res.status).toEqual(404)
       done()
-      return res
     })
 
     afterAll(async (done) => {
-      const res = await PostModel.deleteOne({ _id: id })
+      await PostModel.deleteOne({ _id: id })
       done()
-      return res
     })
   })
 
@@ -68,7 +63,6 @@ describe('PostService', () => {
       expect(res.body.title).toEqual('test')
       expect(res.body.content).toEqual('test')
       done()
-      return res
     })
 
     test('should return 400 error if invalid request', async (done) => {
@@ -109,13 +103,11 @@ describe('PostService', () => {
       expect(res2.body.fields).toEqual(['title', 'content'])
 
       done()
-      return res2
     })
 
     afterAll(async (done) => {
-      const res = await PostModel.deleteOne({ _id: id })
+      await PostModel.deleteOne({ _id: id })
       done()
-      return res
     })
   })
 
@@ -129,7 +121,6 @@ describe('PostService', () => {
       // then
       expect(res.status).toEqual(204)
       done()
-      return res
     })
 
     test('should return 400 error if not exist post document by id', async (done) => {
@@ -139,7 +130,6 @@ describe('PostService', () => {
       //then
       expect(res.status).toEqual(400)
       done()
-      return res
     })
   })
 })

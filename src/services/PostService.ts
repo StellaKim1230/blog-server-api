@@ -1,5 +1,7 @@
 import PostModel, { Post } from '../models/Post'
 
+type PostInput = Pick<Post, 'title' | 'content'>
+
 export default class PostService {
   public async list() {
     try {
@@ -15,7 +17,7 @@ export default class PostService {
     return post
   }
 
-  public async create(postInput: Pick<Post, 'title' | 'content'>) {
+  public async create(postInput: PostInput) {
     const { title, content } = postInput
 
     if (title && content) {
