@@ -12,9 +12,13 @@ db.once('open', () => {
 })
 
 const app = express()
-
+app.use(express.json())
 app.use('/', routes)
 
-app.listen(4000, () => {
-  console.log('server start')
-})
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(4000, () => {
+    console.log('server start')
+  })
+}
+
+export default app
