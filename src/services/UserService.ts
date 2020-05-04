@@ -48,4 +48,8 @@ export default class UserService {
 
     return { result: true, data: { email, accessToken } }
   }
+
+  public async getProfile(user?: string) {
+    return await UserModel.findOne({ email: user }, { password: false })
+  }
 }

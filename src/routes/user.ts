@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import UserService from '../services/UserService'
+import authenticateMiddleware from '../middlewares/authenticateMiddleware'
 
 const router = Router()
 
@@ -22,6 +23,16 @@ router.post('/signin', async (req, res) => {
     res.send(data)
   } else {
     res.status(401).send({ fields: data })
+  }
+})
+
+router.get('/profile', authenticateMiddleware, async (req, res) => {
+  const userProfile = await user.getProfile(req.user)
+
+  if (userProfile) {
+    res.send(userProfile)
+  } else {
+    res.status(403).send()
   }
 })
 
