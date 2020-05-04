@@ -3,7 +3,12 @@ import mongoose from 'mongoose'
 
 import routes from './routes'
 
-const dbUrl = process.env.DB_URL ?? 'mongodb://localhost:27017/myblog'
+const getDbUrl = () => {
+  if (process.env.DB_URL) return Buffer.from(process.env.DB_URL, 'base64').toString('ascii')
+  return 'mongodb://localhost:27017/myblog'
+}
+
+const dbUrl = getDbUrl()
 
 mongoose.connect(dbUrl, {
   useUnifiedTopology: true,
