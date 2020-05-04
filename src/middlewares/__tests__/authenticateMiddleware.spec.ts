@@ -9,7 +9,7 @@ describe('authenticateMiddleware', () => {
       const accessToken = generateAccessToken('test@test.com')
       const req: any = {
         headers: {
-          Authorization: accessToken,
+          authorization: accessToken,
         }
       }
       const res: any = {}
@@ -25,7 +25,7 @@ describe('authenticateMiddleware', () => {
       // given
       const req: any = {
         headers: {
-          Authorization: '',
+          authorization: '',
         }
       }
       const res: any = {
@@ -44,7 +44,7 @@ describe('authenticateMiddleware', () => {
       // given
       const req: any = {
         headers: {
-          Authorization: 'unAutorized token',
+          authorization: 'unAutorized token',
         }
       }
       const res: any = {
