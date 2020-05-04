@@ -15,4 +15,14 @@ router.post('/signup', async (req, res) => {
   }
 })
 
+router.post('/signin', async (req, res) => {
+  const { result, data } = await user.login(req.body)
+
+  if (result) {
+    res.send(data)
+  } else {
+    res.status(401).send({ fields: data })
+  }
+})
+
 export default router

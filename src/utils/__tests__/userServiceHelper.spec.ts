@@ -1,6 +1,7 @@
 import { compare } from 'bcrypt'
+import { verify } from 'jsonwebtoken'
 
-import { validateEmailFormat, hashPassword } from '../userServiceHelper'
+import { validateEmailFormat, hashPassword, generateAccessToken, SECRET } from '../userServiceHelper'
 
 describe('userServiceHelper', () => {
   describe('validateEmailFormat(email: string)', () => {
@@ -16,13 +17,23 @@ describe('userServiceHelper', () => {
   })
 
   describe('hashPassword(password: string)', () => {
-    test('', async () => {
+    test('', async (done) => {
       const plainPassword = 'test1234'
       const hashedPassword = await hashPassword(plainPassword)
       const compareResult = await compare(plainPassword, hashedPassword)
 
       expect(plainPassword).not.toEqual(hashedPassword)
       expect(compareResult).toBe(true)
+      done()
+    })
+  })
+  
+  describe('generateAccessToken(email: string)', () => {
+    test('should return generated access token', () => {
+      const email = 'test@test.com'
+      const accessToken = generateAccessToken(email)
+
+      expect((verify(accessToken, SECRET) as any).email).toEqual(email)
     })
   })
 })

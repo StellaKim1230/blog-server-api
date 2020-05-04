@@ -1,19 +1,17 @@
-import jwt from 'jsonwebtoken'
+import { compare } from 'bcrypt'
 
 import UserModel from '../models/User'
-import { validateEmailFormat, hashPassword } from '../utils/userServiceHelper'
+import { validateEmailFormat, hashPassword, generateAccessToken } from '../utils/userServiceHelper'
 
-const secret = 'jsairjsdf%@$Sdfsd'
-const TOKEN_EXPIRES_IN = '7d'
 const DUPLICATE_KEY = 11000
 
-interface SignupData {
+interface AuthenticateData {
   email: string
   password: string
 }
 
 export default class UserService {
-  public async create(signupData: SignupData) {
+  public async create(signupData: AuthenticateData) {
     try {
       if (!validateEmailFormat(signupData.email)) {
         return { result: false, data: [{ email: 'invalid email format' }]}
@@ -25,7 +23,7 @@ export default class UserService {
         password: hashedPassword,
       })
   
-      const accessToken = jwt.sign({ email }, secret, { expiresIn: TOKEN_EXPIRES_IN})
+      const accessToken = generateAccessToken(email)
 
       return { result: true, data: { email, accessToken } }
     } catch (e) {
@@ -34,5 +32,20 @@ export default class UserService {
       }
       return { result: false, data: [e.errmsg] }
     }
+  }
+
+  public async login(signinData: AuthenticateData) {
+    const user = await UserModel.findOne({ email: signinData.email })
+
+    if (!user) return { result: false, data: [{ email: 'authenticate error' }]}
+
+    const { email, password } = user
+    const isAuthenticated = await compare(signinData.password, password)
+
+    if (!isAuthenticated) return { result: false, data: [{ password: 'authenticate error' }]}
+
+    const accessToken = generateAccessToken(email)
+
+    return { result: true, data: { email, accessToken } }
   }
 }
