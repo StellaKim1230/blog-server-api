@@ -6,7 +6,8 @@ import routes from './routes'
 const dbUrl = process.env.DB_URL ?? 'mongodb://localhost:27017/myblog'
 
 mongoose.connect(dbUrl, {
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useNewUrlParser: true
 })
 
 const db = mongoose.connection
