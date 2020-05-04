@@ -23,6 +23,7 @@ module.exports = {
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
     "src/**",
+    "!src/@types/**",
     "!src/app.ts",
     "!src/models/**",
     "!**/node_modules/**"
@@ -175,7 +176,7 @@ module.exports = {
   // transform: {
   //   "^.+\\.ts$": "ts-jest"
   // },
-  preset: "ts-jest"
+  preset: "ts-jest",
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
@@ -186,7 +187,7 @@ module.exports = {
   // unmockedModulePathPatterns: undefined,
 
   // Indicates whether each individual test should be reported during the run
-  // verbose: undefined,
+  verbose: true,
 
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
   // watchPathIgnorePatterns: [],

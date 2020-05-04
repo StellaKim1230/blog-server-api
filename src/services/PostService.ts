@@ -1,3 +1,4 @@
+import { Error } from 'mongoose'
 import PostModel, { Post } from '../models/Post'
 
 type PostInput = Pick<Post, 'title' | 'content'>
@@ -18,14 +19,14 @@ export default class PostService {
   }
 
   public async create(postInput: PostInput) {
-    const { title, content } = postInput
+    const post = new PostModel(postInput)
+    const err = post.validateSync()
 
-    if (title && content) {
-      const createdPost = await PostModel.create(postInput)
-      return createdPost
+    if (err instanceof Error.ValidationError) {
+      return null
     }
 
-    return null
+    return await post.save()
   }
 
   public async delete(id: string) {
