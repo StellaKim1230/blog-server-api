@@ -15,4 +15,4 @@ jobs:
         with:
           node-version: 10.x
       - run: npm install
-      - run: DB_URL=${{ secrets.DB_URL }} NODE_ENV=test jest --detectOpenHandles --forceExit
+      - run: DB_URL=${{ secrets.DB_URL }} NODE_ENV=test ./node_modules/.bin/jest --detectOpenHandles --forceExit
