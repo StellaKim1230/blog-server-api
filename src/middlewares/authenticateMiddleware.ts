@@ -2,8 +2,9 @@ import { RequestHandler } from 'express'
 import { verify } from 'jsonwebtoken'
 
 import { SECRET } from '../utils/userServiceHelper'
+import UserService from '../services/UserService'
 
-const authenticateMiddleware: RequestHandler = (req, res, next) => {
+const authenticateMiddleware: RequestHandler = async (req, res, next) => {
   const token = req.headers['authorization']
 
   if (!token) {
@@ -12,10 +13,14 @@ const authenticateMiddleware: RequestHandler = (req, res, next) => {
 
   try {
     const verifyResult: any = verify(token.toString(), SECRET)
+    const user = await new UserService().getProfile(verifyResult.email)
 
-    if (typeof verifyResult !== 'string') {
-      req.user = verifyResult.email
+    if (!user) {
+      return res.status(403).send({ message: 'unauthorized' })
     }
+
+    req.user = user
+
     next()
   } catch (e) {
     res.status(403).send({ message: 'unauthorized' })
