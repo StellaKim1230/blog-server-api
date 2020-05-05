@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import PostService from '../services/PostService'
+import authenticateMiddleware from '../middlewares/authenticateMiddleware'
 
 const router = Router()
 
@@ -20,8 +21,8 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
-  const createdPost = await post.create(req.body)
+router.post('/', authenticateMiddleware, async (req, res) => {
+  const createdPost = await post.create(req.body, req.user)
 
   if (createdPost) {
     res.status(201).send(createdPost)
@@ -33,8 +34,8 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.delete('/:id', async (req, res) => {
-  const isDeleted = await post.delete(req.params.id)
+router.delete('/:id', authenticateMiddleware, async (req, res) => {
+  const isDeleted = await post.delete(req.params.id, req.user)
 
   if (isDeleted) {
     res.status(204).send()
