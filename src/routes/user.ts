@@ -27,7 +27,7 @@ router.post('/signin', async (req, res) => {
 })
 
 router.get('/profile', authenticateMiddleware, async (req, res) => {
-  const userProfile = await user.getProfile(req.user)
+  const userProfile = await user.getProfile(req.user.email)
 
   if (userProfile) {
     res.send(userProfile)

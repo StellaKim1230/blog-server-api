@@ -22,6 +22,7 @@ describe('UserService', () => {
         .send(user)
       // then
       expect(res.status).toEqual(201)
+      expect(res.body).toHaveProperty('_id')
       expect(res.body).toHaveProperty('accessToken')
       expect(res.body.email).toEqual('test@test.com')
       done()
@@ -78,6 +79,7 @@ describe('UserService', () => {
         .send(user)
       // then
       expect(res.status).toEqual(200)
+      expect(res.body).toHaveProperty('_id')
       expect(res.body).toHaveProperty('accessToken')
       expect(res.body.email).toEqual('test@test.com')
       done()
@@ -150,6 +152,7 @@ describe('UserService', () => {
       // then
       expect(res.status).toEqual(200)
       expect(res.body.email).toEqual('test@test.com')
+      expect(res.body).toHaveProperty('_id')
       expect(res.body).not.toHaveProperty('password')
       done()
     })

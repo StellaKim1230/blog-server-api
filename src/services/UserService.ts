@@ -1,6 +1,6 @@
 import { compare } from 'bcrypt'
 
-import UserModel from '../models/User'
+import UserModel, { User } from '../models/User'
 import { validateEmailFormat, hashPassword, generateAccessToken } from '../utils/userServiceHelper'
 
 const DUPLICATE_KEY = 11000
@@ -18,14 +18,14 @@ export default class UserService {
       }
 
       const hashedPassword = await hashPassword(signupData.password)
-      const { email } = await UserModel.create({
+      const { _id, email } = await UserModel.create({
         email: signupData.email,
         password: hashedPassword,
       })
   
       const accessToken = generateAccessToken(email)
 
-      return { result: true, data: { email, accessToken } }
+      return { result: true, data: { _id, email, accessToken } }
     } catch (e) {
       if (e.code === DUPLICATE_KEY) {
         return { result: false, data: [{ email: 'email has already exist' }]}
@@ -39,17 +39,17 @@ export default class UserService {
 
     if (!user) return { result: false, data: [{ email: 'authenticate error' }]}
 
-    const { email, password } = user
+    const { _id, email, password } = user
     const isAuthenticated = await compare(signinData.password, password)
 
     if (!isAuthenticated) return { result: false, data: [{ password: 'authenticate error' }]}
 
     const accessToken = generateAccessToken(email)
 
-    return { result: true, data: { email, accessToken } }
+    return { result: true, data: { _id, email, accessToken } }
   }
 
-  public async getProfile(user?: string) {
-    return await UserModel.findOne({ email: user }, { password: false })
+  public async getProfile(user?: string): Promise<Pick<User, 'email' | 'id'> | null> {
+    return await UserModel.findOne({ email: user }).select(['email', '_id'])
   }
 }
