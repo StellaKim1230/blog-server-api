@@ -6,16 +6,18 @@ import UserService from '../../services/UserService'
 describe('authenticateMiddleware(req, res, next)', () => {
   test('should next function called once if exist token in header and token has verified', async (done) => {
     // given
-    const userServiceMock = jest.spyOn(UserService.prototype, 'getProfile').mockImplementation(async () => {
-      return {
-        email: 'test@test.com'
-      }
-    })
+    const userServiceMock = jest
+      .spyOn(UserService.prototype, 'getProfile')
+      .mockImplementation(async () => {
+        return {
+          email: 'test@test.com',
+        }
+      })
     const accessToken = generateAccessToken('test@test.com')
     const req: any = {
       headers: {
         authorization: accessToken,
-      }
+      },
     }
     const res: any = {}
     const nextSpy = jest.fn()
@@ -33,10 +35,10 @@ describe('authenticateMiddleware(req, res, next)', () => {
     const req: any = {
       headers: {
         authorization: '',
-      }
+      },
     }
     const res: any = {
-      send: jest.fn()
+      send: jest.fn(),
     }
     res.status = jest.fn().mockReturnValue(res)
     const next: any = jest.fn()
@@ -53,10 +55,10 @@ describe('authenticateMiddleware(req, res, next)', () => {
     const req: any = {
       headers: {
         authorization: 'unAutorized token',
-      }
+      },
     }
     const res: any = {
-      send: jest.fn()
+      send: jest.fn(),
     }
     res.status = jest.fn().mockReturnValue(res)
     const next: any = jest.fn()
@@ -70,17 +72,19 @@ describe('authenticateMiddleware(req, res, next)', () => {
 
   test('should return 403 error if does not exist user in database', async (done) => {
     // given
-    const userServiceMock = jest.spyOn(UserService.prototype, 'getProfile').mockImplementation(async () => {
-      return null
-    })
+    const userServiceMock = jest
+      .spyOn(UserService.prototype, 'getProfile')
+      .mockImplementation(async () => {
+        return null
+      })
     const accessToken = generateAccessToken('notExistEmail@test.com')
     const req: any = {
       headers: {
         authorization: accessToken,
-      }
+      },
     }
     const res: any = {
-      send: jest.fn()
+      send: jest.fn(),
     }
     res.status = jest.fn().mockReturnValue(res)
     const next: any = jest.fn()
