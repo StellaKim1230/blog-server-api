@@ -11,23 +11,30 @@ describe('PostService', () => {
 
   beforeAll(async (done) => {
     const userService = new UserService()
-    await userService.create({ email: 'test@test.com', password: 'test1234' })
-    await userService.create({ email: 'differentEmail@test.com', password: 'test1234' })
+    await userService.create({
+      name: '김지은',
+      email: 'test@test.com',
+      password: 'test1234',
+    })
+    await userService.create({
+      name: '김지은',
+      email: 'differentEmail@test.com',
+      password: 'test1234',
+    })
     done()
   })
 
   describe('GET /posts list()', () => {
     test('should return post list', async (done) => {
-      const res = await request(app)
-        .get('/posts')
+      const res = await request(app).get('/posts')
 
-        expect(res.status).toEqual(200)
-        expect(Array.isArray(res.body)).toBe(true)
-        done()
+      expect(res.status).toEqual(200)
+      expect(Array.isArray(res.body)).toBe(true)
+      done()
     })
   })
 
-  describe('GET /posts/:id findById(id: string)' , () => {
+  describe('GET /posts/:id findById(id: string)', () => {
     let id: string
 
     beforeAll(async (done) => {
@@ -37,8 +44,7 @@ describe('PostService', () => {
     })
 
     test('should return one of post document', async (done) => {
-      const res = await request(app)
-        .get(`/posts/${id}`)
+      const res = await request(app).get(`/posts/${id}`)
       expect(res.status).toEqual(200)
       expect(res.body.title).toEqual('test')
       expect(res.body.content).toEqual('test')
@@ -46,8 +52,7 @@ describe('PostService', () => {
     })
 
     test('should return 400 error if post documnet not exist', async (done) => {
-      const res = await request(app)
-        .get('/posts/NOT_EXIST_ID')
+      const res = await request(app).get('/posts/NOT_EXIST_ID')
       expect(res.status).toEqual(404)
       done()
     })
