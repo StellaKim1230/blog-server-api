@@ -1,5 +1,6 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import çors from 'cors'
 
 import routes from './routes'
 
@@ -24,6 +25,7 @@ db.once('open', () => {
 
 const app = express()
 app.use(express.json())
+app.use(çors())
 app.use('/', routes)
 
 if (process.env.NODE_ENV !== 'test') {
